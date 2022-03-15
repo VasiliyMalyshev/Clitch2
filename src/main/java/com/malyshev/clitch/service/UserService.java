@@ -3,7 +3,6 @@ package com.malyshev.clitch.service;
 import com.malyshev.clitch.model.User;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface UserService {
     void addUser(User user);
@@ -12,7 +11,7 @@ public interface UserService {
 
     void removeUserById(long id);
 
-    Optional<User> getUserById(long id);
+    User getUserById(long id);
 
     List<User> getAllUsers();
 

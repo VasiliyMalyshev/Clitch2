@@ -12,33 +12,47 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.rmi.ServerException;
+import java.util.List;
 
 @RequestMapping(value = "/api")
-@Controller
+@RestController
 public class UserController {
 
     private final UserService userService;
-
-    //User user1 = ;
 
     @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
-    @GetMapping(value = "/user")
-    public ResponseEntity<String> index() {
-       // if (userService.getUserById(id).isPresent()) {
-       //     return userService.getUserById(id).get();
-       // } else {
-            return ResponseEntity.ok("qwerty");
-       // }
+    @GetMapping("/user")
+    public ResponseEntity<List<User>> getAllUsers() {
+        List<User> users = userService.getAllUsers();
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    @PostMapping("/postbody")
-    public ResponseEntity<User> postBody(@RequestBody User user) {
+    @GetMapping("user/{id}")
+    public ResponseEntity<User> getUserById(@PathVariable long id) {
+        User user = userService.getUserById(id);
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/user")
+    public ResponseEntity<User> addNewUser(@RequestBody User user) {
         userService.addUser(user);
-        return new ResponseEntity<>(user, HttpStatus.CREATED);
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @PutMapping("/user/{id}")
+    public ResponseEntity<User> updateUser(@RequestBody User user, @PathVariable long id) {
+        userService.updateUser(user);
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/user/{id}")
+    public ResponseEntity<User> deleteUser(@PathVariable long id) {
+        userService.removeUserById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

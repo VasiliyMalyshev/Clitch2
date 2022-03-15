@@ -2,11 +2,11 @@ package com.malyshev.clitch.service;
 
 import com.malyshev.clitch.dao.UserRepository;
 import com.malyshev.clitch.model.User;
+import com.sun.istack.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -33,9 +33,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> getUserById(long id) {
-        return userRepository.findById(id);
+    @NotNull
+    public User getUserById(long id) {
+        return userRepository.findById(id).get();
     }
+
 
     @Override
     public List<User> getAllUsers() {
