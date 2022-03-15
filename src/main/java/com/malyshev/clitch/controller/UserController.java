@@ -1,6 +1,8 @@
 package com.malyshev.clitch.controller;
 
+import com.malyshev.clitch.model.FriendRequest;
 import com.malyshev.clitch.model.User;
+import com.malyshev.clitch.service.FriendRequestService;
 import com.malyshev.clitch.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,10 +15,12 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final FriendRequestService friendRequestService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, FriendRequestService friendRequestService) {
         this.userService = userService;
+        this.friendRequestService = friendRequestService;
     }
 
     @GetMapping
@@ -46,6 +50,12 @@ public class UserController {
     @DeleteMapping("/{id}")
     public ResponseEntity<User> deleteUser(@PathVariable long id) {
         userService.removeUserById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/friendRequest")
+    public ResponseEntity<FriendRequest> requestFriend(@RequestBody FriendRequest friendRequest) {
+        friendRequestService.addFriendRequest(friendRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
