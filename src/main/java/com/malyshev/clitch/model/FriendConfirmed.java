@@ -1,10 +1,12 @@
 package com.malyshev.clitch.model;
 
+
 import javax.persistence.*;
 
 @Entity
-@Table(name = "friendRequest")
-public class FriendRequest {
+@Table(name = "friendConfirmed")
+public class FriendConfirmed {
+
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -56,7 +58,7 @@ public class FriendRequest {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        FriendRequest that = (FriendRequest) o;
+        FriendConfirmed that = (FriendConfirmed) o;
 
         if (id != that.id) return false;
         if (user != null ? !user.equals(that.user) : that.user != null) return false;
@@ -71,3 +73,4 @@ public class FriendRequest {
         return result;
     }
 }
+

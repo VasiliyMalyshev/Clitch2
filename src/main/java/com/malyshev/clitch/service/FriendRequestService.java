@@ -12,12 +12,10 @@ public interface FriendRequestService {
 
     void updateFriendRequest(FriendRequest friendRequest);
 
-    void removeUserById(long id);
+    void removeFriendRequestById(long id);
 
-    User getUserById(long id);
+    FriendRequest getFriendRequestById(long id);
 
-    List<User> getAllUsers();
-
-    User getUserByUsername(String username);
+    List<FriendRequest> getAllFriendRequest();
 
 }
