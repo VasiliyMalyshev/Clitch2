@@ -8,8 +8,8 @@ import com.malyshev.clitch.service.FriendRequestService;
 import com.malyshev.clitch.service.UserService;
 import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
-/*
 
+/*
 @Component
 public class Initializer {
 
@@ -56,4 +56,5 @@ public class Initializer {
     private void init() {
         datainit();
     }
-}*/
+}
+*/

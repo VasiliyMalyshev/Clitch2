@@ -8,6 +8,9 @@ import com.malyshev.clitch.model.FriendConfirmed;
 import com.malyshev.clitch.model.FriendRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -32,17 +35,17 @@ public class FriendConfirmedServiceImpl implements FriendConfirmedService {
         Long userId = userRepository.findUserId(friendConfirmed.getUser().getUsername());
         Long friendId = userRepository.findUserId(friendConfirmed.getFriend().getUsername());
 
-        String uf = String.valueOf(userId + "," +  friendId);
-        String ufReversed = String.valueOf(friendId + "," + userId);
-        String userConfirmedId = friendConfirmedRepository.findUserId(friendConfirmed.getUser().getId(), friendConfirmed.getFriend().getId());
-        String userConfirmedIdReversed = friendConfirmedRepository.findUserIdReversed(friendConfirmed.getFriend().getId(), friendConfirmed.getUser().getId());
+        List<Long> uf = Arrays.asList(userId, friendId);
 
-        if (uf.equals(userConfirmedId) || ufReversed.equals(userConfirmedId) || uf.equals(userConfirmedIdReversed) || ufReversed.equals(userConfirmedIdReversed)) {
+        List<Long> userConfirmedId = friendConfirmedRepository.findUserId(friendConfirmed.getUser().getId(), friendConfirmed.getFriend().getId());
+        List<Long> userConfirmedIdReversed = new ArrayList<>(userConfirmedId);
+        Collections.reverse(userConfirmedIdReversed);
+
+        if (uf.equals(userConfirmedId) || uf.equals(userConfirmedIdReversed)) {
             throw new AlreadySentException("Пользователи " + username + " и " + friendName + " уже друзья");
         } else {
             friendConfirmedRepository.save(friendConfirmed);
         }
-        //  Long friendRequestId = friendRequestRepository.findFriendId(friendRequest.getFriend().getId());
     }
 
     @Override

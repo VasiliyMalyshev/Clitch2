@@ -8,6 +8,9 @@ import com.malyshev.clitch.model.FriendConfirmed;
 import com.malyshev.clitch.model.FriendRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -16,7 +19,6 @@ public class FriendRequestServiceImpl implements FriendRequestService {
     private final FriendRequestRepository friendRequestRepository;
     private final UserRepository userRepository;
     private final FriendConfirmedRepository friendConfirmedRepository;
-   // FriendConfirmed friendConfirmed = new FriendConfirmed();
 
     public FriendRequestServiceImpl(FriendRequestRepository friendRequestRepository, UserRepository userRepository, FriendConfirmedRepository friendConfirmedRepository) {
         this.friendRequestRepository = friendRequestRepository;
@@ -27,28 +29,35 @@ public class FriendRequestServiceImpl implements FriendRequestService {
     @Override
     public void addFriendRequest(FriendRequest friendRequest) {
 
+        if (friendRequest.getUser() == null) {
+            throw new AlreadySentException("User is null");
+        } else if (friendRequest.getFriend() == null) {
+            throw new AlreadySentException("Friend is null");
+        }
+
         String username = userRepository.findUsername(friendRequest.getUser().getUsername());
         String friendName = userRepository.findUsername(friendRequest.getFriend().getUsername());
 
         Long userId = userRepository.findUserId(friendRequest.getUser().getUsername());
         Long friendId = userRepository.findUserId(friendRequest.getFriend().getUsername());
 
-        String userConfirmedId = friendConfirmedRepository.findUserId(userId, friendId);
-        String friendConfirmedID = friendConfirmedRepository.findUserIdReversed(userId, friendId);
+        List<Long> uf = Arrays.asList(userId, friendId);
 
-        String uf = String.valueOf(userId + "," +  friendId);
-        String ufReversed = String.valueOf(friendId + "," + userId);
-        String userRequestId = friendRequestRepository.findUserId(friendRequest.getUser().getId(), friendRequest.getFriend().getId());
-        String userRequestIdReversed = friendRequestRepository.findUserIdReversed(friendRequest.getFriend().getId(), friendRequest.getUser().getId());
+        List<Long> userRequestId = friendRequestRepository.findUserId(userId, friendId);
+        List<Long> userRequestIdReversed = new ArrayList<>(userRequestId);
+        Collections.reverse(userRequestIdReversed);
 
-        if (uf.equals(userConfirmedId) || uf.equals(friendConfirmedID) || ufReversed.equals(userConfirmedId) || ufReversed.equals(friendConfirmedID)) {
+        List<Long> userConfirmedId = friendConfirmedRepository.findUserId(userId, friendId);
+        List<Long> userConfirmedIdReversed = new ArrayList<>(userConfirmedId);
+        Collections.reverse(userConfirmedIdReversed);
+
+        if (uf.equals(userConfirmedId) || uf.equals(userConfirmedIdReversed)) {
             throw new AlreadySentException("Пользователи " + username + " и " + friendName + " уже друзья");
-        } else  if (uf.equals(userRequestId) || ufReversed.equals(userRequestId) || uf.equals(userRequestIdReversed) || ufReversed.equals(userRequestIdReversed)) {
+        } else  if (uf.equals(userRequestId) || uf.equals(userRequestIdReversed)) {
             throw new AlreadySentException("Запрос от " + username + " к " + friendName + " был уже отправлен");
         } else {
             friendRequestRepository.save(friendRequest);
         }
-      //  Long friendRequestId = friendRequestRepository.findFriendId(friendRequest.getFriend().getId());
     }
 
     @Override

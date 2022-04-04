@@ -14,4 +14,10 @@ public class RequestGlobalExceptionHandler {
         sent.setInfo(exception.getMessage());
         return new ResponseEntity<>(sent, HttpStatus.BAD_REQUEST);
     }
+
+    public ResponseEntity<Exception> exceptionResponseEntity(Exception e) {
+        Exception exception = new Exception();
+        exception.setStackTrace(e.getStackTrace());
+        return new ResponseEntity<>(exception, HttpStatus.BAD_REQUEST);
+    }
 }
