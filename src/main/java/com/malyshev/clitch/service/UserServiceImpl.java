@@ -4,6 +4,7 @@ import com.malyshev.clitch.dao.UserRepository;
 import com.malyshev.clitch.model.User;
 import com.sun.istack.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,11 +34,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @NotNull
     public User getUserById(long id) {
         return userRepository.findById(id).get();
     }
-
 
     @Override
     public List<User> getAllUsers() {
@@ -46,5 +45,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserByUsername(String username) {
         return userRepository.getUserByUsername(username);
+    }
+    @Override
+    public String findUsername(String username) {
+        return userRepository.findUsername(username);
     }
 }

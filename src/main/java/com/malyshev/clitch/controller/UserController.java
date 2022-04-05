@@ -1,6 +1,7 @@
 package com.malyshev.clitch.controller;
 
 import com.malyshev.clitch.model.User;
+import com.malyshev.clitch.service.FriendRequestService;
 import com.malyshev.clitch.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
