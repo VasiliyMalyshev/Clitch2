@@ -1,6 +1,7 @@
 package com.malyshev.clitch.controller;
 
 import com.malyshev.clitch.model.User;
+import com.malyshev.clitch.service.RoleService;
 import com.malyshev.clitch.service.FriendRequestService;
 import com.malyshev.clitch.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +15,11 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
-
+    private final RoleService roleService;
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, RoleService roleService) {
         this.userService = userService;
+        this.roleService = roleService;
     }
 
     @GetMapping
